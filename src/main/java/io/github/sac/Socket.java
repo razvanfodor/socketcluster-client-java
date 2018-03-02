@@ -29,6 +29,7 @@ public class Socket extends Emitter {
     private HashMap <Long,Object[]> acks;
     private List <Channel> channels;
     private WebSocketAdapter adapter;
+    private String socketId;
 
     public Socket(String URL) {
         this.URL = URL;
@@ -166,6 +167,7 @@ public class Socket extends Emitter {
                     switch (Parser.parse(dataobject,event)) {
 
                         case ISAUTHENTICATED:
+                            socketId = (String) ((JSONObject) dataobject ).opt("id");
                             listener.onAuthentication(Socket.this, ((JSONObject)dataobject).getBoolean("isAuthenticated"));
                             subscribeChannels();
                             break;
@@ -547,6 +549,11 @@ public class Socket extends Emitter {
     public void disableLogging(){
         LogManager.getLogManager().reset();
     }
+
+    public String getSocketId() {
+        return socketId;
+    }
+
     /**
      * Channels need to be subscribed everytime whenever client is reconnected to server (handled inside)
      * Add only one listener to one channel for whole lifetime of process

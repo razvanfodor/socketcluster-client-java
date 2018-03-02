@@ -37,6 +37,12 @@ public class Main {
             }
 
             public void onAuthentication(Socket socket,Boolean status) {
+                String socketId = socket.getSocketId();
+                if (socketId != null){
+                    System.out.println("Connecting to chanel: " + socketId);
+                    Socket.Channel channel = socket.createChannel(socketId);
+                    channel.subscribe();
+                }
                 if (status) {
                     System.out.println("socket is authenticated");
                 } else {
